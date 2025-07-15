@@ -18,12 +18,14 @@
 
 ### 🛠️  Сборка
 ```sh
-./gradlew build
+./gradlew build   # На Linux/macOS
+gradlew.bat build # На Windows
 ```
 
 ### 🧪 Запуск тестов
 ```sh
-./gradlew test
+./gradlew test   # На Linux/macOS
+gradlew.bat test # На Windows
 ```
 
 ---

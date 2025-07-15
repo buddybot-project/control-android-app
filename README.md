@@ -19,12 +19,14 @@ The app provides joystick-based control for movement and the camera, displays a 
 
 ### 🛠️ Build
 ```sh
-./gradlew build
+./gradlew build   # On Linux/macOS
+gradlew.bat build # On Windows
 ```
 
 ### 🧪 Run tests
 ```sh
-./gradlew test
+./gradlew test   # On Linux/macOS
+gradlew.bat test # On Windows
 ```
 
 ---
