@@ -33,7 +33,6 @@ cache:
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
-    - export ANDROID_SDK_ROOT=$ANDROID_HOME
     - ./gradlew assembleDebug
     - ./gradlew test
   artifacts:
