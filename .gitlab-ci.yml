@@ -15,7 +15,7 @@
 # https://docs.gitlab.com/development/cicd/templates/
 # This specific template is located at:
 # https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
-image: budtmo/docker-android:api-33
+image: budtmo/docker-android:emulator_13.0
 
 variables:
     GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.daemon=false -Xmx512m"
