@@ -18,23 +18,21 @@
 image: registry.gitlab.com/buddybot3/control/android-app-builder:latest
 
 variables:
-    GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.daemon=false -Xmx512m"
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.configureondemand=true"
+  SONAR_SOURCES: "app/src/test/java"
+  SONAR_BINARIES: "app/build/tmp/kotlin-classes/debug,app/build/intermediates/compile_app_classes_jar/debug"
 
 stages:          # List of stages for jobs, and their order of execution
   - build
   - test
- 
+  - analyze
+
  
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
+    - echo "Building project..."
     - ./gradlew assembleDebug
-    - ./gradlew test
-  artifacts:
-    paths:
-      - app/build/outputs/apk/debug/
-    when: on_success
-    expire_in: 1 week
     
 test:
   stage: test
@@ -43,3 +41,20 @@ test:
     - ./gradlew lint
   rules:
     - if: $CI_MERGE_REQUEST_ID  # Запускать только для MR
+
+sonarcloud-analysis:
+  stage: analyze
+  script:
+    - sonar-scanner
+      -Dsonar.projectKey=$SONAR_PROJECT_KEY
+      -Dsonar.organization=$SONAR_ORGANIZATION
+      -Dsonar.host.url=$SONAR_HOST_URL
+      -Dsonar.login=$SONAR_TOKEN
+      -Dsonar.sources=$SONAR_SOURCES
+      -Dsonar.tests=$SONAR_TESTS
+      -Dsonar.java.binaries=$SONAR_BINARIES
+      -Dsonar.pullrequest.key=$CI_MERGE_REQUEST_IID
+      -Dsonar.pullrequest.branch=$CI_COMMIT_REF_NAME
+      -Dsonar.pullrequest.base=$CI_MERGE_REQUEST_TARGET_BRANCH_NAME 
+  only:
+    - merge_requests
