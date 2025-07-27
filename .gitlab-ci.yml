@@ -12,6 +12,8 @@ stages:
 build:
   stage: build
   script:
+    - echo "CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH"
+    - echo "CI_MERGE_REQUEST_TARGET_BRANCH_NAME=$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - |
       if [[ "$CI_COMMIT_BRANCH" == "master" || "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "master" ]]; then
         echo "Building release..."
@@ -29,6 +31,8 @@ build:
 test:
   stage: test
   script:
+    - echo "CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH"
+    - echo "CI_MERGE_REQUEST_TARGET_BRANCH_NAME=$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - |
       if [[ "$CI_COMMIT_BRANCH" == "master" || "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "master" ]]; then
         echo "Running release tests and lint..."
@@ -58,6 +62,8 @@ test:
 sonarcloud-analysis:
   stage: analyze
   script:
+    - echo "CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH"
+    - echo "CI_MERGE_REQUEST_TARGET_BRANCH_NAME=$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - |
       if [[ "$CI_COMMIT_BRANCH" == "master" || "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "master" ]]; then
         export BUILD_TYPE="release"
