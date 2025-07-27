@@ -8,6 +8,10 @@ android {
     namespace = "com.buddybot3.control"
     compileSdk = 36
 
+    lint {
+        sarifReport = true
+    }
+
     defaultConfig {
         applicationId = "com.buddybot3.control"
         minSdk = 24
