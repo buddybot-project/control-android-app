@@ -2,16 +2,18 @@ image: registry.gitlab.com/buddybot3/control/android-app-builder:latest
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.configureondemand=true"
-  
+
 stages:
   - build
   - test
   - analyze
 
-# Адаптивный билд: debug для всего, release — только для master
+# 🧱 Адаптивный билд: debug для всех, release — только для master
 build:
   stage: build
   script:
+    - echo "CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH"
+    - echo "CI_MERGE_REQUEST_TARGET_BRANCH_NAME=$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - |
       if [[ "$CI_COMMIT_BRANCH" == "master" || "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "master" ]]; then
         echo "Building release..."
@@ -19,6 +21,7 @@ build:
       else
         echo "Building debug..."
         ./gradlew assembleDebug
+      fi
   only:
     - merge_requests
     - main
@@ -28,24 +31,34 @@ build:
 test:
   stage: test
   script:
+    - echo "CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH"
+    - echo "CI_MERGE_REQUEST_TARGET_BRANCH_NAME=$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - |
       if [[ "$CI_COMMIT_BRANCH" == "master" || "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "master" ]]; then
         echo "Running release tests and lint..."
         ./gradlew testReleaseUnitTest lintRelease
+        export BUILD_TYPE="release"
       else
         echo "Running debug tests and lint..."
         ./gradlew testDebugUnitTest lintDebug
+        export BUILD_TYPE="debug"
+      fi
+  after_script:
+    - mkdir -p artifacts
+    - |
+      if [[ "$BUILD_TYPE" == "release" ]]; then
+        cp app/build/test-results/testReleaseUnitTest/TEST-*.xml artifacts/ || true
+        cp app/build/reports/lint-results-release.sarif artifacts/ || true
+        cp app/build/reports/lint-results-release.html artifacts/ || true
+      else
+        cp app/build/test-results/testDebugUnitTest/TEST-*.xml artifacts/ || true
+        cp app/build/reports/lint-results-debug.sarif artifacts/ || true
+        cp app/build/reports/lint-results-debug.html artifacts/ || true
+      fi
   artifacts:
-    reports:
-      junit:
-        - app/build/test-results/testDebugUnitTest/TEST-*.xml
-        - app/build/test-results/testReleaseUnitTest/TEST-*.xml
-      codequality:
-        - app/build/reports/lint-results-debug.sarif
-        - app/build/reports/lint-results-release.sarif
+    when: always
     paths:
-      - app/build/reports/lint-results-debug.html
-      - app/build/reports/lint-results-release.html
+      - artifacts/
     expire_in: 1 week
   only:
     - merge_requests
@@ -56,6 +69,8 @@ test:
 sonarcloud-analysis:
   stage: analyze
   script:
+    - echo "CI_COMMIT_BRANCH=$CI_COMMIT_BRANCH"
+    - echo "CI_MERGE_REQUEST_TARGET_BRANCH_NAME=$CI_MERGE_REQUEST_TARGET_BRANCH_NAME"
     - |
       if [[ "$CI_COMMIT_BRANCH" == "master" || "$CI_MERGE_REQUEST_TARGET_BRANCH_NAME" == "master" ]]; then
         export BUILD_TYPE="release"
