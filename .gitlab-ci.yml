@@ -2,7 +2,7 @@ image: registry.gitlab.com/buddybot3/control/android-app-builder:latest
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.configureondemand=true"
-  
+
 stages:
   - build
   - test
@@ -19,6 +19,7 @@ build:
       else
         echo "Building debug..."
         ./gradlew assembleDebug
+      fi
   only:
     - merge_requests
     - main
@@ -35,6 +36,7 @@ test:
       else
         echo "Running debug tests and lint..."
         ./gradlew testDebugUnitTest lintDebug
+      fi
   artifacts:
     reports:
       junit:
