@@ -26,10 +26,11 @@ stages:          # List of stages for jobs, and their order of execution
  
 cache:
   key: gradle
+  files:
+      - gradle/wrapper/gradle-wrapper.properties
   paths:
     - .gradle/
-    - app/build/
-
+ 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
   script:
