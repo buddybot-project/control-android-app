@@ -1,0 +1,60 @@
+# This file is a template, and might need editing before it works on your project.
+# This is a sample GitLab CI/CD configuration file that should run without any modifications.
+# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
+# it uses echo commands to simulate the pipeline execution.
+#
+# A pipeline is composed of independent jobs that run scripts, grouped into stages.
+# Stages run in sequential order, but jobs within stages run in parallel.
+#
+# For more information, see: https://docs.gitlab.com/ee/ci/yaml/#stages
+#
+# You can copy and paste this template into a new `.gitlab-ci.yml` file.
+# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
+#
+# To contribute improvements to CI/CD templates, please follow the Development guide at:
+# https://docs.gitlab.com/development/cicd/templates/
+# This specific template is located at:
+# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
+image: registry.gitlab.com/buddybot3/control/android-app-builder:latest
+
+variables:
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.configureondemand=true"
+  SONAR_SOURCES: "app/src/test/java"
+  SONAR_BINARIES: "app/build/tmp/kotlin-classes/debug,app/build/intermediates/compile_app_classes_jar/debug"
+
+stages:          # List of stages for jobs, and their order of execution
+  - build
+  - test
+  - analyze
+
+ 
+build-job:       # This job runs in the build stage, which runs first.
+  stage: build
+  script:
+    - echo "Building project..."
+    - ./gradlew assembleDebug
+    
+test:
+  stage: test
+  script:
+    - ./gradlew test
+    - ./gradlew lint
+  rules:
+    - if: $CI_MERGE_REQUEST_ID  # Запускать только для MR
+
+sonarcloud-analysis:
+  stage: analyze
+  script:
+    - sonar-scanner
+      -Dsonar.projectKey=$SONAR_PROJECT_KEY
+      -Dsonar.organization=$SONAR_ORGANIZATION
+      -Dsonar.host.url=$SONAR_HOST_URL
+      -Dsonar.login=$SONAR_TOKEN
+      -Dsonar.sources=$SONAR_SOURCES
+      -Dsonar.tests=$SONAR_TESTS
+      -Dsonar.java.binaries=$SONAR_BINARIES
+      -Dsonar.pullrequest.key=$CI_MERGE_REQUEST_IID
+      -Dsonar.pullrequest.branch=$CI_COMMIT_REF_NAME
+      -Dsonar.pullrequest.base=$CI_MERGE_REQUEST_TARGET_BRANCH_NAME 
+  only:
+    - merge_requests
