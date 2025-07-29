@@ -2,8 +2,10 @@ image: registry.gitlab.com/buddybot3/control/android-app-builder:latest
 
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.configureondemand=true"
+  SONAR_SOURCES: "app/src/test/java"
+  SONAR_BINARIES: "app/build/tmp/kotlin-classes/debug,app/build/intermediates/compile_app_classes_jar/debug"
 
-stages:
+stages:          # List of stages for jobs, and their order of execution
   - build
   - test
   - analyze

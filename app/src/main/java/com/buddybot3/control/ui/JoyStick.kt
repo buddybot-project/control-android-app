@@ -30,7 +30,7 @@ fun JoyStick(
                     onDragStart = {
                         dragPosition = it
                     },
-                    onDrag = { change, dragAmount ->
+                    onDrag = { change, _ ->
                         val radius = min(size.width, size.height) / 2f
                         val offsetFromCenter = change.position - Offset(radius, radius)
                         val distance = offsetFromCenter.getDistance()

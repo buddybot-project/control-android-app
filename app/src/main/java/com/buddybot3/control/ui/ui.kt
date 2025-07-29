@@ -2,11 +2,14 @@ package com.buddybot3.control.ui
 
 import android.util.Log
 import android.view.Window
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalWindowInfo
@@ -34,7 +37,7 @@ fun CreateUI() {
             modifier = Modifier
                 .padding(25.dp)
                 .size(joySize.dp)
-                .align(androidx.compose.ui.Alignment.BottomEnd),
+                .align(Alignment.BottomEnd),
             dotSize = 30.dp
         ) { x: Float, y: Float ->
             Log.d("Joystick right", "x=$x, y=$y")
@@ -43,10 +46,22 @@ fun CreateUI() {
             modifier = Modifier
                 .padding(25.dp)
                 .size(joySize.dp)
-                .align(androidx.compose.ui.Alignment.BottomStart),
+                .align(Alignment.BottomStart),
             dotSize = 30.dp
         ) { x: Float, y: Float ->
             Log.d("Joystick left", "x=$x, y=$y")
+        }
+        Column(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(end = 5.dp, top = 5.dp, bottom = 5.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            MicButton(
+                modifier = Modifier.size(45.dp).fillMaxSize()
+            ) { i: Boolean ->
+                Log.i("MicButton", "Clicked($i)")
+            }
         }
     }
 }
