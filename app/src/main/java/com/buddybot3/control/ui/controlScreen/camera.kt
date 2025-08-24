@@ -1,4 +1,4 @@
-package com.buddybot3.control.ui
+package com.buddybot3.control.ui.controlScreen
 
 import android.Manifest
 import android.app.Activity

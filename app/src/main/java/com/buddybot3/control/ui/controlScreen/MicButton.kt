@@ -1,6 +1,7 @@
-package com.buddybot3.control.ui
+package com.buddybot3.control.ui.controlScreen
 
 
+import android.Manifest
 import android.app.Activity
 import android.media.AudioFormat
 import android.media.AudioRecord
@@ -70,7 +71,7 @@ fun MicButton(
             .background(colorBack)
             .clickable {
 
-                if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.RECORD_AUDIO)
+                if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO)
                     == PackageManager.PERMISSION_GRANTED) {
                     isActive = !isActive
                     if (isActive) {
@@ -84,7 +85,7 @@ fun MicButton(
                     }
                     onClick(isActive)
                 } else {
-                    permissionLauncher.launch(android.Manifest.permission.RECORD_AUDIO)
+                    permissionLauncher.launch(Manifest.permission.RECORD_AUDIO)
                 }
             }
     ) {
@@ -110,7 +111,7 @@ private fun startRecording(
         AudioFormat.ENCODING_PCM_16BIT
     )
 
-    if (ContextCompat.checkSelfPermission(activity, android.Manifest.permission.RECORD_AUDIO)
+    if (ContextCompat.checkSelfPermission(activity, Manifest.permission.RECORD_AUDIO)
         == PackageManager.PERMISSION_GRANTED) {
         val audioRecord = AudioRecord(
             MediaRecorder.AudioSource.MIC,

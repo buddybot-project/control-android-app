@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.Androidapp" parent="android:Theme.Material.Light.NoActionBar" />
+    <style name="Theme.DarkMode" parent="android:Theme.Material">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">#2F2F2F</item>
+    </style>
+
 </resources>

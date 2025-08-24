@@ -1,4 +1,4 @@
-package com.buddybot3.control.ui
+package com.buddybot3.control.ui.controlScreen
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures

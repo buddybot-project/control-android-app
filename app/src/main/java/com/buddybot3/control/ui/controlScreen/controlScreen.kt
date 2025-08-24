@@ -1,4 +1,4 @@
-package com.buddybot3.control.ui
+package com.buddybot3.control.ui.controlScreen
 
 import android.util.Log
 import android.view.Window
@@ -18,6 +18,20 @@ import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import kotlin.math.min
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+
+class ControlScreenActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setupUI(window)
+
+        setContent {
+            CreateUI()
+        }
+    }
+}
 
 fun setupUI(window: Window) {
     // Установка горизонтального режима и скрытие лишних элементов
@@ -60,7 +74,7 @@ fun CreateUI() {
             MicButton(
                 modifier = Modifier.size(45.dp).fillMaxSize()
             ) { i: Boolean ->
-                Log.i("MicButton", "Clicked($i)")
+                Log.d("MicButton", "Clicked($i)")
             }
         }
     }

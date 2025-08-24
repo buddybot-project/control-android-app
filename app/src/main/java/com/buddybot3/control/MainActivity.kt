@@ -1,19 +1,15 @@
 package com.buddybot3.control
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import com.buddybot3.control.ui.CreateUI
-import androidx.activity.compose.setContent
-import com.buddybot3.control.ui.setupUI
+import com.buddybot3.control.ui.controlScreen.ControlScreenActivity
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setupUI(window)
+        startActivity(Intent(this, ControlScreenActivity::class.java))
 
-        setContent {
-            CreateUI()
-        }
     }
 }
